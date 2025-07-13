@@ -1,0 +1,71 @@
+# SMTP Tester .htaccess Configuration
+
+# Security Headers
+Header always set X-Content-Type-Options nosniff
+Header always set X-Frame-Options DENY
+Header always set X-XSS-Protection "1; mode=block"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+# Hide sensitive files
+<Files "*.lock">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "*.sql">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "composer.*">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Protect config directory
+<Directory "config">
+    Order allow,deny
+    Deny from all
+</Directory>
+
+# Allow access to install directory only if install.lock doesn't exist
+RewriteEngine On
+
+# Check for installation
+RewriteCond %{REQUEST_URI} !^/install/
+RewriteCond %{DOCUMENT_ROOT}/config/install.lock !-f
+RewriteRule ^(.*)$ /install/ [L,R=302]
+
+# Redirect install directory if already installed
+RewriteCond %{REQUEST_URI} ^/install/
+RewriteCond %{DOCUMENT_ROOT}/config/install.lock -f
+RewriteRule ^install/(.*)$ / [L,R=302]
+
+# API routing
+RewriteRule ^api/smtp-test/?$ api/smtp-test.php [L]
+RewriteRule ^api/admin-message/?$ api/admin-message.php [L]
+
+# Enable compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
+
+# Cache static resources
+<IfModule mod_expires.c>
+    ExpiresActive on
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+</IfModule>

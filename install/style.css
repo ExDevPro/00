@@ -1,0 +1,433 @@
+/* Installation Wizard Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+}
+
+.install-box {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.header h1 {
+    color: #2d3748;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.header p {
+    color: #718096;
+    font-size: 1.1rem;
+}
+
+/* Progress Bar */
+.progress-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.progress-bar::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    right: 20%;
+    height: 4px;
+    background: #e2e8f0;
+    border-radius: 2px;
+    z-index: 1;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    flex: 1;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: #a0aec0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+.step.active .step-number {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    transform: scale(1.1);
+}
+
+.step-label {
+    font-size: 0.9rem;
+    color: #718096;
+    text-align: center;
+}
+
+.step.active .step-label {
+    color: #2d3748;
+    font-weight: 600;
+}
+
+/* Error and Success Boxes */
+.error-box {
+    background: #fed7d7;
+    border: 1px solid #feb2b2;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.error-box h3 {
+    color: #c53030;
+    margin-bottom: 10px;
+}
+
+.error-box ul {
+    color: #c53030;
+    margin-left: 20px;
+}
+
+.error-box li {
+    margin-bottom: 5px;
+}
+
+/* Step Content */
+.step-content {
+    margin-bottom: 30px;
+}
+
+.step-content h2 {
+    color: #2d3748;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.step-content p {
+    color: #718096;
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+/* Form Styles */
+.install-form {
+    background: #f7fafc;
+    border-radius: 12px;
+    padding: 30px;
+    border: 1px solid #e2e8f0;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    color: #2d3748;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-group small {
+    display: block;
+    color: #a0aec0;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* Database Info */
+.db-info {
+    background: #f0fff4;
+    border: 1px solid #9ae6b4;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.db-info h3 {
+    color: #22543d;
+    margin-bottom: 15px;
+}
+
+.db-info ul {
+    color: #276749;
+}
+
+.db-info li {
+    margin-bottom: 8px;
+    padding-left: 10px;
+}
+
+/* Success Info */
+.success-info {
+    background: #f0fff4;
+    border: 1px solid #9ae6b4;
+    border-radius: 12px;
+    padding: 25px;
+    margin: 30px 0;
+}
+
+.success-info h3 {
+    color: #22543d;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.success-info ol {
+    color: #276749;
+    margin-left: 20px;
+}
+
+.success-info li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.success-info code {
+    background: #e6fffa;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Consolas', monospace;
+    font-size: 0.9rem;
+}
+
+/* Buttons */
+.install-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    min-width: 200px;
+}
+
+.install-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.secondary-btn {
+    background: #f7fafc;
+    color: #4a5568;
+    border: 2px solid #e2e8f0;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    margin-left: 15px;
+}
+
+.secondary-btn:hover {
+    background: #edf2f7;
+    border-color: #cbd5e0;
+    transform: translateY(-1px);
+}
+
+.action-buttons {
+    text-align: center;
+    margin: 30px 0;
+}
+
+/* Delete Instructions */
+.delete-instructions {
+    background: #fffaf0;
+    border: 1px solid #fbd38d;
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 30px;
+}
+
+.delete-instructions h3 {
+    color: #c05621;
+    margin-bottom: 15px;
+}
+
+.delete-instructions p {
+    color: #9c4221;
+    margin-bottom: 20px;
+}
+
+.method {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-left: 4px solid #ed8936;
+}
+
+.method h4 {
+    color: #c05621;
+    margin-bottom: 10px;
+}
+
+.method ol {
+    color: #9c4221;
+    margin-left: 20px;
+}
+
+.method li {
+    margin-bottom: 5px;
+}
+
+.method code {
+    background: #f7fafc;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-family: 'Monaco', 'Consolas', monospace;
+    display: block;
+    margin-top: 10px;
+    color: #2d3748;
+    border: 1px solid #e2e8f0;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid #e2e8f0;
+    margin-top: 40px;
+}
+
+.footer p {
+    color: #a0aec0;
+    font-size: 0.9rem;
+}
+
+.footer a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .install-box {
+        padding: 30px 20px;
+        margin: 10px;
+    }
+    
+    .header h1 {
+        font-size: 2rem;
+    }
+    
+    .progress-bar {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .progress-bar::before {
+        display: none;
+    }
+    
+    .step {
+        margin-bottom: 20px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .secondary-btn {
+        margin-left: 0;
+        margin-top: 15px;
+    }
+    
+    .install-form {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .install-box {
+        padding: 20px 15px;
+    }
+    
+    .header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .step-content h2 {
+        font-size: 1.5rem;
+    }
+    
+    .install-btn, .secondary-btn {
+        width: 100%;
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+}

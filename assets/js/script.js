@@ -18,6 +18,7 @@ class SMTPTester {
     }
 
     init() {
+        this.checkInstallation();
         this.setupEventListeners();
         this.setupWYSIWYG();
         this.setupFileUpload();
@@ -25,6 +26,46 @@ class SMTPTester {
         this.loadAdminMessage();
         this.loadContent();
         this.updateSubjectPlaceholder();
+    }
+
+    checkInstallation() {
+        // Check if application is properly installed
+        fetch('./api/admin-message.php')
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success && data.install_url) {
+                    // Show installation required message
+                    this.showInstallationMessage(data.install_url);
+                }
+            })
+            .catch(error => {
+                console.warn('Installation check failed:', error);
+            });
+    }
+
+    showInstallationMessage(installUrl) {
+        const messageContainer = document.getElementById('admin-message-container');
+        if (messageContainer) {
+            messageContainer.innerHTML = `
+                <div class="admin-message-box warning">
+                    <div class="message-content">
+                        <h3>⚠️ Installation Required</h3>
+                        <p>The SMTP Tester database is not configured. Please run the installation wizard to set up the application.</p>
+                        <a href="${installUrl}" class="install-link" style="
+                            display: inline-block;
+                            margin-top: 10px;
+                            padding: 10px 20px;
+                            background: #667eea;
+                            color: white;
+                            text-decoration: none;
+                            border-radius: 6px;
+                            font-weight: 600;
+                        ">Run Installation Wizard</a>
+                    </div>
+                </div>
+            `;
+            messageContainer.style.display = 'block';
+        }
     }
 
     setupEventListeners() {

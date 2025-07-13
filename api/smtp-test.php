@@ -14,6 +14,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
+// Check if installation is complete
+$install_lock = __DIR__ . '/../config/install.lock';
+if (!file_exists($install_lock)) {
+    http_response_code(503);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Application not installed. Please run the installation wizard first.',
+        'install_url' => '../install/'
+    ]);
+    exit;
+}
+
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../app/db_config.php';
