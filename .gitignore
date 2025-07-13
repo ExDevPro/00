@@ -1,0 +1,66 @@
+# Dependencies
+/vendor/
+/node_modules/
+
+# Build artifacts
+/dist/
+/build/
+
+# Logs
+*.log
+/logs/
+
+# Cache
+/cache/
+/.cache/
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+/tmp/
+/temp/
+*.tmp
+
+# Database
+*.sqlite
+*.db
+
+# Resource data files (runtime generated)
+/Resource/Data/attachments/*
+!/Resource/Data/attachments/.gitkeep
+/Resource/Data/logs/*
+!/Resource/Data/logs/.gitkeep
+
+# Composer
+composer.lock
+
+# PHPUnit
+/coverage/
+.phpunit.result.cache
+
+# Backup files
+*.bak
+*.backup
+
+# Upload files
+/uploads/

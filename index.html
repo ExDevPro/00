@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free SMTP Tester - Instantly test and troubleshoot your email server configuration. Professional, secure, and easy-to-use SMTP testing tool.">
+    <meta name="keywords" content="SMTP tester, email server test, SMTP configuration, email troubleshooting, free SMTP test">
+    <meta name="author" content="0mail.Pro">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Free SMTP Tester - Test Your Email Server Instantly">
+    <meta property="og:description" content="Professional SMTP testing tool to verify your email server configuration. Test connections, send emails, and troubleshoot issues.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://smtp-tester.0mail.pro">
+    <meta property="og:image" content="https://smtp-tester.0mail.pro/assets/images/og-image.jpg">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Free SMTP Tester - Test Your Email Server Instantly">
+    <meta name="twitter:description" content="Professional SMTP testing tool to verify your email server configuration.">
+    <meta name="twitter:image" content="https://smtp-tester.0mail.pro/assets/images/twitter-card.jpg">
+    
+    <title>Free SMTP Tester - Instantly Test & Troubleshoot Your Email Server</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="assets/css/style.css" as="style">
+    <link rel="preload" href="assets/js/script.js" as="script">
+    
+    <!-- JSON-LD Schema Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Free SMTP Tester",
+        "description": "Professional SMTP testing tool to verify email server configurations",
+        "url": "https://smtp-tester.0mail.pro",
+        "applicationCategory": "Utility",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "creator": {
+            "@type": "Organization",
+            "name": "0mail.Pro",
+            "url": "https://0mail.pro"
+        }
+    }
+    </script>
+</head>
+<body>
+    <!-- Module 1: Persistent Header -->
+    <header class="header" id="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <a href="https://0mail.pro" target="_blank" rel="noopener">
+                        <img src="assets/images/0mail-logo.svg" alt="0mail.Pro Logo" class="logo-img">
+                        <span class="logo-text">0mail.Pro</span>
+                    </a>
+                </div>
+                <div class="nav-menu" id="nav-menu">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="https://0mail.pro" target="_blank" rel="noopener" class="nav-link">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="https://blog.0mail.pro" target="_blank" rel="noopener" class="nav-link">Blog</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="https://t.me/zeromailpro" target="_blank" rel="noopener" class="nav-link">Join Telegram</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#smtp-tester" class="nav-link active">SMTP Tester</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-toggle" id="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Module 2: Admin Message Box -->
+    <section class="admin-message" id="admin-message">
+        <div class="container">
+            <div class="message-box" id="message-box">
+                <div class="message-content">
+                    <i class="message-icon fas fa-info-circle"></i>
+                    <span class="message-text" id="admin-message-text">
+                        Welcome to the Free SMTP Tester! Test your email server configurations safely and securely.
+                    </span>
+                    <button class="message-close" id="message-close" aria-label="Close message">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 3: Hero & Application Interface -->
+    <main class="main-content">
+        <section class="hero" id="smtp-tester">
+            <div class="container">
+                <div class="hero-header">
+                    <h1 class="hero-title">Free SMTP Tester: Instantly Test & Troubleshoot Your Email Server</h1>
+                    <p class="hero-subtitle">Professional-grade SMTP testing tool to verify your email server configuration, test connections, and send test emails securely.</p>
+                </div>
+
+                <div class="smtp-interface">
+                    <form id="smtp-form" class="smtp-form" novalidate>
+                        <div class="form-grid">
+                            <!-- Left Side - SMTP Settings -->
+                            <div class="form-section smtp-settings">
+                                <h2 class="section-title">SMTP Server Configuration</h2>
+                                
+                                <div class="form-group">
+                                    <label for="smtp-host" class="form-label">SMTP Host *</label>
+                                    <input type="text" id="smtp-host" name="smtp_host" class="form-input" 
+                                           placeholder="mail.example.com" required>
+                                    <div class="form-error" id="smtp-host-error"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="smtp-port" class="form-label">Port *</label>
+                                    <select id="smtp-port" name="smtp_port" class="form-select" required>
+                                        <option value="">Select Port</option>
+                                        <option value="465">465 (SSL)</option>
+                                        <option value="587" selected>587 (TLS)</option>
+                                        <option value="25">25 (Standard)</option>
+                                        <option value="2525">2525 (Alternative)</option>
+                                    </select>
+                                    <div class="form-error" id="smtp-port-error"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="smtp-username" class="form-label">Username/Email *</label>
+                                    <input type="email" id="smtp-username" name="smtp_username" class="form-input" 
+                                           placeholder="user@example.com" required>
+                                    <div class="form-error" id="smtp-username-error"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="smtp-password" class="form-label">Password *</label>
+                                    <input type="password" id="smtp-password" name="smtp_password" class="form-input" 
+                                           placeholder="Your SMTP password" required>
+                                    <div class="form-error" id="smtp-password-error"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="from-name" class="form-label">From Name</label>
+                                    <input type="text" id="from-name" name="from_name" class="form-input" 
+                                           placeholder="Your Name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="from-email" class="form-label">From Email *</label>
+                                    <input type="email" id="from-email" name="from_email" class="form-input" 
+                                           placeholder="sender@example.com" required>
+                                    <div class="form-error" id="from-email-error"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="smtp-auth" class="form-label">Authentication</label>
+                                    <select id="smtp-auth" name="smtp_auth" class="form-select">
+                                        <option value="auto" selected>Auto</option>
+                                        <option value="none">None</option>
+                                        <option value="ssl">SSL</option>
+                                        <option value="tls">TLS</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="reply-to" class="form-label">Reply To Email</label>
+                                    <input type="email" id="reply-to" name="reply_to" class="form-input" 
+                                           placeholder="reply@example.com">
+                                </div>
+                            </div>
+
+                            <!-- Right Side - Message Composition -->
+                            <div class="form-section message-composition">
+                                <h2 class="section-title">Test Email Composition</h2>
+                                
+                                <div class="form-group">
+                                    <label for="recipient-email" class="form-label">Recipient Email *</label>
+                                    <input type="email" id="recipient-email" name="recipient_email" class="form-input" 
+                                           placeholder="test@example.com" required>
+                                    <div class="form-error" id="recipient-email-error"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email-subject" class="form-label">Subject</label>
+                                    <input type="text" id="email-subject" name="email_subject" class="form-input" 
+                                           placeholder="Test Email from {smtp_server}" value="Test Email from SMTP Server">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email-message" class="form-label">Message</label>
+                                    <div class="wysiwyg-container">
+                                        <div class="wysiwyg-toolbar">
+                                            <button type="button" class="toolbar-btn" data-command="bold" title="Bold">
+                                                <i class="fas fa-bold"></i>
+                                            </button>
+                                            <button type="button" class="toolbar-btn" data-command="italic" title="Italic">
+                                                <i class="fas fa-italic"></i>
+                                            </button>
+                                            <button type="button" class="toolbar-btn" data-command="underline" title="Underline">
+                                                <i class="fas fa-underline"></i>
+                                            </button>
+                                            <div class="toolbar-divider"></div>
+                                            <button type="button" class="toolbar-btn" data-command="justifyLeft" title="Align Left">
+                                                <i class="fas fa-align-left"></i>
+                                            </button>
+                                            <button type="button" class="toolbar-btn" data-command="justifyCenter" title="Align Center">
+                                                <i class="fas fa-align-center"></i>
+                                            </button>
+                                            <button type="button" class="toolbar-btn" data-command="justifyRight" title="Align Right">
+                                                <i class="fas fa-align-right"></i>
+                                            </button>
+                                        </div>
+                                        <div id="email-message" class="wysiwyg-editor" contenteditable="true" 
+                                             data-placeholder="Enter your test email message here...">
+                                            <p>This is a test email sent from the SMTP Tester application.</p>
+                                            <p>If you receive this email, your SMTP configuration is working correctly!</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email-attachments" class="form-label">Attachments (Optional)</label>
+                                    <div class="file-upload-container">
+                                        <input type="file" id="email-attachments" name="attachments[]" class="file-input" 
+                                               multiple accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif">
+                                        <label for="email-attachments" class="file-upload-label">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                            <span>Click to upload files or drag and drop</span>
+                                        </label>
+                                        <div class="file-info">Max 1MB total, common file types only</div>
+                                        <div class="uploaded-files" id="uploaded-files"></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <!-- Debug and Proxy Controls -->
+                                    <div class="advanced-controls">
+                                        <label class="toggle-control">
+                                            <input type="checkbox" id="debug-mode" name="debug_mode">
+                                            <span class="toggle-slider"></span>
+                                            <span class="toggle-label">Debug Mode</span>
+                                        </label>
+                                        <label class="toggle-control">
+                                            <input type="checkbox" id="proxy-enabled" name="proxy_enabled">
+                                            <span class="toggle-slider"></span>
+                                            <span class="toggle-label">Use Proxy</span>
+                                        </label>
+                                    </div>
+                                    
+                                    <button type="button" id="test-connection" class="btn btn-secondary">
+                                        <i class="fas fa-plug"></i>
+                                        Test Connection
+                                    </button>
+                                    <button type="submit" id="send-email" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane"></i>
+                                        Send Test Email
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Log Box -->
+                    <div class="log-container" id="log-container" style="display: none;">
+                        <div class="log-header">
+                            <h3>SMTP Transaction Log</h3>
+                            <button type="button" class="log-toggle" id="log-toggle">
+                                <i class="fas fa-chevron-up"></i>
+                            </button>
+                        </div>
+                        <div class="log-content" id="log-content">
+                            <div class="log-messages" id="log-messages"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Module 4: Content Sections -->
+        <section class="content-sections">
+            <div class="container">
+                <!-- Technical Article -->
+                <article class="content-article">
+                    <h2>The Ultimate Guide to SMTP: Testing, Troubleshooting, and Best Practices</h2>
+                    <div id="technical-article-content" class="article-content">
+                        <!-- Content loaded from sections.html -->
+                    </div>
+                </article>
+
+                <!-- How-To Guide -->
+                <article class="content-article">
+                    <h2>How to Fully Test Your SMTP Server (Connection & Sending)</h2>
+                    <div id="how-to-guide-content" class="article-content">
+                        <!-- Content loaded from sections.html -->
+                    </div>
+                </article>
+
+                <!-- FAQ Section -->
+                <section class="faq-section">
+                    <h2>Frequently Asked Questions</h2>
+                    <div id="faq-content" class="faq-container">
+                        <!-- Content loaded from sections.html -->
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <!-- Module 5: Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About SMTP Tester</h3>
+                    <p>Professional SMTP testing tool provided by 0mail.Pro. Test your email server configurations safely and securely.</p>
+                    <div class="social-links">
+                        <a href="https://t.me/zeromailpro" target="_blank" rel="noopener" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="https://twitter.com/0mailpro" target="_blank" rel="noopener" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://github.com/0mailpro" target="_blank" rel="noopener" class="social-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://0mail.pro" target="_blank" rel="noopener">Home</a></li>
+                        <li><a href="https://blog.0mail.pro" target="_blank" rel="noopener">Blog</a></li>
+                        <li><a href="https://0mail.pro/contact" target="_blank" rel="noopener">Contact</a></li>
+                        <li><a href="https://0mail.pro/support" target="_blank" rel="noopener">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://0mail.pro/privacy" target="_blank" rel="noopener">Privacy Policy</a></li>
+                        <li><a href="https://0mail.pro/terms" target="_blank" rel="noopener">Terms of Service</a></li>
+                        <li><a href="https://0mail.pro/cookies" target="_blank" rel="noopener">Cookie Policy</a></li>
+                    </ul>
+                    <div class="share-buttons">
+                        <button class="share-btn" data-share="twitter">
+                            <i class="fab fa-twitter"></i> Share
+                        </button>
+                        <button class="share-btn" data-share="linkedin">
+                            <i class="fab fa-linkedin"></i> Share
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 0mail.Pro. All rights reserved. | SMTP Tester v1.0.0</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- FontAwesome for icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" 
+            integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow==" 
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- Main JavaScript -->
+    <script src="assets/js/script.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+</body>
+</html>
