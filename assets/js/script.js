@@ -40,6 +40,12 @@ class SMTPTester {
         // Log toggle
         document.getElementById('log-toggle').addEventListener('click', () => this.toggleLog());
         
+        // Debug mode toggle
+        document.getElementById('debug-mode').addEventListener('change', (e) => this.handleDebugToggle(e));
+        
+        // Proxy toggle
+        document.getElementById('proxy-enabled').addEventListener('change', (e) => this.handleProxyToggle(e));
+        
         // Admin message close
         const messageClose = document.getElementById('message-close');
         if (messageClose) {
@@ -261,9 +267,19 @@ class SMTPTester {
                 this.form.reset();
                 this.uploadedFiles = [];
                 document.getElementById('uploaded-files').innerHTML = '';
+                
+                // Log debug information if available
+                if (response.debug) {
+                    this.logDebugInfo(response.debug);
+                }
             } else {
                 this.logMessage(`Error: ${response.message}`, 'error');
                 this.showError(response.message);
+                
+                // Log debug information if available
+                if (response.debug) {
+                    this.logDebugInfo(response.debug);
+                }
             }
         } catch (error) {
             this.logMessage(`Request failed: ${error.message}`, 'error');
@@ -289,9 +305,19 @@ class SMTPTester {
             if (response.success) {
                 this.logMessage('Connection test successful!', 'success');
                 this.showSuccess('SMTP connection is working correctly!');
+                
+                // Log debug information if available
+                if (response.debug) {
+                    this.logDebugInfo(response.debug);
+                }
             } else {
                 this.logMessage(`Connection failed: ${response.message}`, 'error');
                 this.showError(response.message);
+                
+                // Log debug information if available
+                if (response.debug) {
+                    this.logDebugInfo(response.debug);
+                }
             }
         } catch (error) {
             this.logMessage(`Connection test failed: ${error.message}`, 'error');
@@ -314,6 +340,10 @@ class SMTPTester {
         const messageContent = document.getElementById('email-message').innerHTML;
         formData.append('email_message', messageContent);
 
+        // Add debug and proxy settings
+        formData.append('debug_mode', document.getElementById('debug-mode').checked ? '1' : '0');
+        formData.append('proxy_enabled', document.getElementById('proxy-enabled').checked ? '1' : '0');
+
         // Add files
         this.uploadedFiles.forEach((file, index) => {
             formData.append(`attachments[${index}]`, file);
@@ -332,6 +362,10 @@ class SMTPTester {
                 formData.append(field, element.value);
             }
         });
+
+        // Add debug and proxy settings for connection test too
+        formData.append('debug_mode', document.getElementById('debug-mode').checked ? '1' : '0');
+        formData.append('proxy_enabled', document.getElementById('proxy-enabled').checked ? '1' : '0');
 
         return formData;
     }
@@ -498,6 +532,49 @@ class SMTPTester {
         `;
         this.logMessages.appendChild(logEntry);
         this.logMessages.scrollTop = this.logMessages.scrollHeight;
+    }
+
+    logDebugInfo(debug) {
+        if (!document.getElementById('debug-mode').checked) {
+            return; // Only show debug info when debug mode is enabled
+        }
+        
+        this.logMessage('--- Debug Information ---', 'info');
+        this.logMessage(`Timestamp: ${debug.timestamp}`, 'info');
+        this.logMessage(`PHP Version: ${debug.php_version}`, 'info');
+        this.logMessage(`Proxy Enabled: ${debug.proxy_enabled ? 'Yes' : 'No'}`, 'info');
+        this.logMessage(`Memory Usage: ${this.formatBytes(debug.memory_usage)}`, 'info');
+        this.logMessage(`IP Address: ${debug.ip_address}`, 'info');
+        this.logMessage('--- End Debug Info ---', 'info');
+    }
+
+    formatBytes(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    handleDebugToggle(e) {
+        const isEnabled = e.target.checked;
+        this.logMessage(`Debug mode ${isEnabled ? 'enabled' : 'disabled'}`, 'info');
+        
+        if (isEnabled) {
+            this.showLog();
+            this.logMessage('Debug mode active - detailed logging enabled', 'info');
+        }
+    }
+
+    handleProxyToggle(e) {
+        const isEnabled = e.target.checked;
+        this.logMessage(`Proxy ${isEnabled ? 'enabled' : 'disabled'}`, 'info');
+        
+        if (isEnabled) {
+            this.logMessage('Proxy rotation enabled for enhanced privacy', 'info');
+        } else {
+            this.logMessage('Direct connection - no proxy', 'info');
+        }
     }
 
     showSuccess(message) {

@@ -27,12 +27,16 @@ class SMTPTestAPI {
     private $db;
     private $config;
     private $rateLimiter;
+    private $debugMode;
+    private $proxyEnabled;
 
     public function __construct() {
         try {
             $this->db = Database::getInstance();
             $this->config = $this->loadConfig();
             $this->rateLimiter = new RateLimiter();
+            $this->debugMode = ($_POST['debug_mode'] ?? '0') === '1';
+            $this->proxyEnabled = ($_POST['proxy_enabled'] ?? '0') === '1';
         } catch (Exception $e) {
             $this->sendError('System initialization failed', 500);
         }
@@ -63,11 +67,15 @@ class SMTPTestAPI {
     }
 
     private function testConnection() {
+        $this->debugLog("Starting SMTP connection test");
         $smtpConfig = $this->validateSMTPConfig();
         
         if (!$smtpConfig) {
+            $this->debugLog("SMTP configuration validation failed");
             $this->sendError('Invalid SMTP configuration', 400);
         }
+
+        $this->debugLog("SMTP configuration validated successfully");
 
         try {
             $startTime = microtime(true);
@@ -78,11 +86,18 @@ class SMTPTestAPI {
             // Test connection
             $mailer = new Mailer($transport);
             
+            $this->debugLog("Attempting SMTP connection...");
+            
             // Try to get the transport
             $transport->start();
+            $this->debugLog("SMTP connection established successfully");
+            
             $transport->stop();
+            $this->debugLog("SMTP connection closed");
             
             $connectionTime = round((microtime(true) - $startTime) * 1000, 2);
+            
+            $this->debugLog("Connection test completed in {$connectionTime}ms");
             
             // Store successful configuration
             $this->storeSMTPConfig($smtpConfig, $connectionTime);
@@ -94,17 +109,22 @@ class SMTPTestAPI {
             ]);
             
         } catch (Exception $e) {
+            $this->debugLog("SMTP connection failed: " . $e->getMessage());
             $this->sendError('Connection failed: ' . $this->sanitizeErrorMessage($e->getMessage()), 400);
         }
     }
 
     private function sendEmail() {
+        $this->debugLog("Starting email send process");
         $smtpConfig = $this->validateSMTPConfig();
         $emailData = $this->validateEmailData();
         
         if (!$smtpConfig || !$emailData) {
+            $this->debugLog("Configuration or email data validation failed");
             $this->sendError('Invalid configuration or email data', 400);
         }
+
+        $this->debugLog("Email data validated successfully");
 
         try {
             $startTime = microtime(true);
@@ -112,6 +132,8 @@ class SMTPTestAPI {
             // Create transport
             $transport = $this->createTransport($smtpConfig);
             $mailer = new Mailer($transport);
+            
+            $this->debugLog("Creating email message...");
             
             // Create email
             $email = (new Email())
@@ -130,6 +152,7 @@ class SMTPTestAPI {
 
             // Set message content
             if (!empty($emailData['message'])) {
+                $this->debugLog("Setting HTML message content");
                 $email->html($emailData['message']);
                 $email->text(strip_tags($emailData['message']));
             }
@@ -137,13 +160,19 @@ class SMTPTestAPI {
             // Handle attachments
             $attachmentCount = 0;
             if (!empty($_FILES['attachments'])) {
+                $this->debugLog("Processing email attachments");
                 $attachmentCount = $this->processAttachments($email, $_FILES['attachments']);
+                $this->debugLog("Processed {$attachmentCount} attachments");
             }
 
+            $this->debugLog("Sending email via SMTP...");
+            
             // Send email
             $mailer->send($email);
             
             $sendTime = round((microtime(true) - $startTime) * 1000, 2);
+            
+            $this->debugLog("Email sent successfully in {$sendTime}ms");
             
             // Log the successful send
             $this->logEmailSend($smtpConfig, $emailData, $attachmentCount, $sendTime, true);
@@ -156,6 +185,8 @@ class SMTPTestAPI {
             ]);
             
         } catch (Exception $e) {
+            $this->debugLog("Email sending failed: " . $e->getMessage());
+            
             // Log the failed send
             $this->logEmailSend($smtpConfig, $emailData, 0, 0, false, $e->getMessage());
             
@@ -220,6 +251,8 @@ class SMTPTestAPI {
     }
 
     private function createTransport($config) {
+        $this->debugLog("Creating SMTP transport for {$config['host']}:{$config['port']}");
+        
         // Determine encryption
         $encryption = null;
         switch ($config['auth']) {
@@ -235,6 +268,8 @@ class SMTPTestAPI {
                 break;
         }
 
+        $this->debugLog("Using encryption: " . ($encryption ?? 'none'));
+
         $dsn = sprintf(
             'smtp://%s:%s@%s:%d',
             urlencode($config['username']),
@@ -247,15 +282,24 @@ class SMTPTestAPI {
             $dsn .= '?encryption=' . $encryption;
         }
 
+        $this->debugLog("Transport DSN: " . preg_replace('/:[^:@]*@/', ':***@', $dsn));
+
         $transport = Transport::fromDsn($dsn);
 
         // Apply proxy if enabled
-        if (PROXY_ENABLED && FEATURE_PROXY_SUPPORT) {
+        if ($this->proxyEnabled && PROXY_ENABLED && FEATURE_PROXY_SUPPORT) {
             $proxy = $this->getProxy();
             if ($proxy) {
-                // Note: Proxy implementation would need additional configuration
-                // This is a placeholder for proxy functionality
+                $this->debugLog("Using proxy: {$proxy['host']}:{$proxy['port']}");
+                // Note: Symfony Mailer doesn't directly support SOCKS/HTTP proxies
+                // This would require a custom transport or stream context configuration
+                // For now, we'll log that proxy was requested but may not be fully functional
+                $this->debugLog("Warning: Proxy support is limited in current Symfony Mailer version");
+            } else {
+                $this->debugLog("No proxy available - proceeding with direct connection");
             }
+        } else {
+            $this->debugLog("Proxy disabled or not configured - using direct connection");
         }
 
         return $transport;
@@ -476,14 +520,43 @@ class SMTPTestAPI {
 
     private function sendSuccess($data) {
         http_response_code(200);
-        echo json_encode(['success' => true] + $data);
+        $response = ['success' => true] + $data;
+        
+        if ($this->debugMode) {
+            $response['debug'] = $this->getDebugInfo();
+        }
+        
+        echo json_encode($response);
         exit;
     }
 
     private function sendError($message, $code = 400) {
         http_response_code($code);
-        echo json_encode(['success' => false, 'message' => $message]);
+        $response = ['success' => false, 'message' => $message];
+        
+        if ($this->debugMode) {
+            $response['debug'] = $this->getDebugInfo();
+        }
+        
+        echo json_encode($response);
         exit;
+    }
+
+    private function debugLog($message) {
+        if ($this->debugMode) {
+            error_log("SMTP Debug: " . $message);
+        }
+    }
+
+    private function getDebugInfo() {
+        return [
+            'timestamp' => date('Y-m-d H:i:s'),
+            'php_version' => PHP_VERSION,
+            'proxy_enabled' => $this->proxyEnabled,
+            'memory_usage' => memory_get_usage(true),
+            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
+            'ip_address' => $this->getClientIP()
+        ];
     }
 }
 
@@ -504,24 +577,47 @@ class RateLimiter {
         $windowStart = time() - RATE_LIMIT_WINDOW;
 
         try {
-            // Count requests in current window
+            // Check current rate limit status and update counter
             $stmt = $this->db->prepare("
-                SELECT COUNT(*) FROM rate_limits 
-                WHERE ip_address = ? AND created_at > ?
+                INSERT INTO rate_limits (ip_address, request_count, last_request, created_at) 
+                VALUES (?, 1, NOW(), NOW())
+                ON DUPLICATE KEY UPDATE 
+                    request_count = CASE 
+                        WHEN last_request < ? THEN 1 
+                        ELSE request_count + 1 
+                    END,
+                    last_request = NOW()
             ");
             
             $stmt->execute([$ip, date('Y-m-d H:i:s', $windowStart)]);
-            $count = $stmt->fetchColumn();
 
-            if ($count >= RATE_LIMIT_TESTS) {
-                return false;
-            }
-
-            // Record this request
+            // Check if limit exceeded
             $stmt = $this->db->prepare("
-                INSERT INTO rate_limits (ip_address, created_at) VALUES (?, NOW())
+                SELECT request_count, blocked_until FROM rate_limits 
+                WHERE ip_address = ?
             ");
             $stmt->execute([$ip]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($result) {
+                // Check if currently blocked
+                if ($result['blocked_until'] && strtotime($result['blocked_until']) > time()) {
+                    return false;
+                }
+
+                // Check if exceeded limit
+                if ($result['request_count'] >= RATE_LIMIT_TESTS) {
+                    // Block for rate limit window
+                    $blockUntil = date('Y-m-d H:i:s', time() + RATE_LIMIT_WINDOW);
+                    $stmt = $this->db->prepare("
+                        UPDATE rate_limits 
+                        SET blocked_until = ? 
+                        WHERE ip_address = ?
+                    ");
+                    $stmt->execute([$blockUntil, $ip]);
+                    return false;
+                }
+            }
 
             return true;
 
@@ -533,22 +629,29 @@ class RateLimiter {
 
     private function cleanup() {
         try {
-            // Create rate_limits table if it doesn't exist
+            // Create rate_limits table if it doesn't exist (should already exist from schema)
             $this->db->prepare("
                 CREATE TABLE IF NOT EXISTS rate_limits (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     ip_address VARCHAR(45) NOT NULL,
+                    request_count INT DEFAULT 1,
+                    last_request TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    blocked_until TIMESTAMP NULL,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    INDEX idx_ip_time (ip_address, created_at)
+                    UNIQUE KEY unique_ip (ip_address),
+                    INDEX idx_ip_address (ip_address),
+                    INDEX idx_blocked_until (blocked_until)
                 ) ENGINE=InnoDB
             ")->execute();
 
-            // Clean old entries
-            $cleanupTime = time() - (RATE_LIMIT_WINDOW * 2);
+            // Clean old/expired blocks and reset counters for IPs not accessed recently
+            $cleanupTime = date('Y-m-d H:i:s', time() - (RATE_LIMIT_WINDOW * 2));
             $stmt = $this->db->prepare("
-                DELETE FROM rate_limits WHERE created_at < ?
+                UPDATE rate_limits 
+                SET request_count = 0, blocked_until = NULL 
+                WHERE last_request < ? OR (blocked_until IS NOT NULL AND blocked_until < NOW())
             ");
-            $stmt->execute([date('Y-m-d H:i:s', $cleanupTime)]);
+            $stmt->execute([$cleanupTime]);
 
         } catch (Exception $e) {
             error_log("Rate limiter cleanup error: " . $e->getMessage());
