@@ -1,0 +1,330 @@
+<!-- Technical Article Content -->
+<div id="technical-article">
+    <h3>Understanding SMTP Fundamentals</h3>
+    <p>Simple Mail Transfer Protocol (SMTP) is the standard communication protocol for email transmission across Internet Protocol (IP) networks. SMTP servers handle the sending and routing of email messages between mail servers.</p>
+    
+    <h3>SMTP Server Configuration Components</h3>
+    <ul>
+        <li><strong>SMTP Host:</strong> The server hostname or IP address (e.g., smtp.gmail.com, mail.domain.com)</li>
+        <li><strong>Port Numbers:</strong>
+            <ul>
+                <li><strong>Port 25:</strong> Standard SMTP port (often blocked by ISPs)</li>
+                <li><strong>Port 587:</strong> SMTP submission port with STARTTLS encryption</li>
+                <li><strong>Port 465:</strong> SMTP over SSL (SMTPS)</li>
+                <li><strong>Port 2525:</strong> Alternative port when others are blocked</li>
+            </ul>
+        </li>
+        <li><strong>Authentication:</strong> Username/password credentials for server access</li>
+        <li><strong>Encryption:</strong> SSL/TLS protocols to secure email transmission</li>
+    </ul>
+
+    <h3>Common SMTP Server Providers</h3>
+    <div class="provider-grid">
+        <div class="provider-item">
+            <h4>Gmail/Google Workspace</h4>
+            <code>
+                Host: smtp.gmail.com<br>
+                Port: 587 (TLS) or 465 (SSL)<br>
+                Authentication: Required
+            </code>
+        </div>
+        <div class="provider-item">
+            <h4>Outlook/Office 365</h4>
+            <code>
+                Host: smtp-mail.outlook.com<br>
+                Port: 587 (TLS)<br>
+                Authentication: Required
+            </code>
+        </div>
+        <div class="provider-item">
+            <h4>Yahoo Mail</h4>
+            <code>
+                Host: smtp.mail.yahoo.com<br>
+                Port: 587 (TLS) or 465 (SSL)<br>
+                Authentication: Required
+            </code>
+        </div>
+    </div>
+
+    <h3>SMTP Testing Best Practices</h3>
+    <ol>
+        <li><strong>Test Connection First:</strong> Always verify server connectivity before sending emails</li>
+        <li><strong>Use Proper Authentication:</strong> Ensure credentials are correct and account has SMTP access enabled</li>
+        <li><strong>Check Firewall Settings:</strong> Verify that SMTP ports are not blocked by your firewall</li>
+        <li><strong>Validate Email Addresses:</strong> Use properly formatted sender and recipient addresses</li>
+        <li><strong>Monitor Delivery:</strong> Check both successful delivery and bounce/error handling</li>
+        <li><strong>Test Different Content Types:</strong> Verify plain text, HTML, and attachment handling</li>
+    </ol>
+
+    <h3>Troubleshooting Common SMTP Issues</h3>
+    <div class="troubleshooting-section">
+        <h4>Connection Timeouts</h4>
+        <ul>
+            <li>Check if the SMTP port is blocked by your ISP or firewall</li>
+            <li>Verify the SMTP server hostname is correct</li>
+            <li>Try alternative ports (2525 instead of 587)</li>
+            <li>Ensure your network allows outbound SMTP connections</li>
+        </ul>
+
+        <h4>Authentication Failures</h4>
+        <ul>
+            <li>Verify username and password are correct</li>
+            <li>Check if two-factor authentication requires app-specific passwords</li>
+            <li>Ensure SMTP access is enabled in your email provider settings</li>
+            <li>Try using the full email address as the username</li>
+        </ul>
+
+        <h4>SSL/TLS Certificate Errors</h4>
+        <ul>
+            <li>Verify the correct encryption method (SSL vs TLS)</li>
+            <li>Check if the server certificate is valid and not expired</li>
+            <li>Try disabling certificate verification for testing (not recommended for production)</li>
+            <li>Ensure your system's root certificates are up to date</li>
+        </ul>
+    </div>
+</div>
+
+<!-- How-To Guide Content -->
+<div id="how-to-guide">
+    <h3>Step 1: Gather Your SMTP Server Information</h3>
+    <p>Before testing, collect the following information from your email provider:</p>
+    <ul>
+        <li>SMTP server hostname or IP address</li>
+        <li>Port number (typically 587, 465, or 25)</li>
+        <li>Username (usually your email address)</li>
+        <li>Password or app-specific password</li>
+        <li>Encryption method (Auto, SSL, TLS, or None)</li>
+    </ul>
+
+    <h3>Step 2: Configure Basic SMTP Settings</h3>
+    <ol>
+        <li><strong>Enter SMTP Host:</strong> Input your mail server's hostname (e.g., smtp.gmail.com)</li>
+        <li><strong>Select Port:</strong> Choose the appropriate port based on your provider's requirements</li>
+        <li><strong>Set Authentication:</strong> Enter your username and password</li>
+        <li><strong>Choose Encryption:</strong> Select the encryption method (Auto is recommended)</li>
+    </ol>
+
+    <h3>Step 3: Test SMTP Connection</h3>
+    <p>Before sending any emails, verify that your SMTP configuration is working:</p>
+    <ol>
+        <li>Fill in the required SMTP settings (host, port, username, password)</li>
+        <li>Click the "Test Connection" button</li>
+        <li>Monitor the log output for connection status</li>
+        <li>Verify successful authentication and connection</li>
+    </ol>
+
+    <h3>Step 4: Configure Email Details</h3>
+    <p>Set up the email message details:</p>
+    <ul>
+        <li><strong>From Name:</strong> Display name for the sender (optional)</li>
+        <li><strong>From Email:</strong> Sender's email address</li>
+        <li><strong>Reply-To:</strong> Alternative reply address (optional)</li>
+        <li><strong>Recipient:</strong> Destination email address for testing</li>
+        <li><strong>Subject:</strong> Email subject line</li>
+        <li><strong>Message:</strong> Email body content (supports HTML)</li>
+    </ul>
+
+    <h3>Step 5: Send Test Email</h3>
+    <ol>
+        <li>Complete all required fields in both SMTP and email sections</li>
+        <li>Add attachments if needed (optional, max 1MB total)</li>
+        <li>Click "Send Test Email" button</li>
+        <li>Monitor the transaction log for sending progress</li>
+        <li>Check the recipient inbox for successful delivery</li>
+    </ol>
+
+    <h3>Step 6: Verify and Troubleshoot</h3>
+    <p>After sending, verify the test results:</p>
+    <ul>
+        <li><strong>Check Recipient Inbox:</strong> Confirm the email was delivered</li>
+        <li><strong>Review Log Messages:</strong> Examine any error messages or warnings</li>
+        <li><strong>Test Different Recipients:</strong> Try sending to different email providers</li>
+        <li><strong>Verify Spam Folders:</strong> Check if emails are being filtered as spam</li>
+        <li><strong>Test Attachments:</strong> Ensure attached files are received correctly</li>
+    </ul>
+
+    <h3>Advanced Testing Scenarios</h3>
+    <div class="advanced-scenarios">
+        <h4>Testing Multiple Recipients</h4>
+        <p>To test bulk email capabilities, try sending to multiple addresses separated by commas.</p>
+
+        <h4>HTML vs Plain Text</h4>
+        <p>Test both HTML-formatted messages and plain text to ensure compatibility.</p>
+
+        <h4>Large Attachments</h4>
+        <p>Test the server's attachment size limits by gradually increasing file sizes.</p>
+
+        <h4>International Characters</h4>
+        <p>Test email delivery with non-ASCII characters in subject lines and message content.</p>
+    </div>
+</div>
+
+<!-- FAQ Section Content -->
+<div id="faq-section">
+    <div class="faq-item">
+        <button class="faq-question">
+            What is SMTP and why do I need to test it?
+            <i class="fas fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+            <p>SMTP (Simple Mail Transfer Protocol) is the standard protocol for sending emails across the internet. Testing your SMTP configuration ensures that your applications can successfully send emails to users, such as registration confirmations, password resets, notifications, and marketing communications.</p>
+            <p>Regular SMTP testing helps identify configuration issues, authentication problems, and delivery failures before they affect your users.</p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question">
+            What SMTP settings do I need to test my email server?
+            <i class="fas fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+            <p>You'll need the following information from your email provider:</p>
+            <ul>
+                <li><strong>SMTP Host:</strong> Server hostname (e.g., smtp.gmail.com)</li>
+                <li><strong>Port:</strong> Usually 587 (TLS), 465 (SSL), or 25 (standard)</li>
+                <li><strong>Username:</strong> Often your email address</li>
+                <li><strong>Password:</strong> Your email password or app-specific password</li>
+                <li><strong>Encryption:</strong> SSL, TLS, or none</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question">
+            Which SMTP port should I use?
+            <i class="fas fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+            <p>The choice depends on your email provider and security requirements:</p>
+            <ul>
+                <li><strong>Port 587:</strong> Recommended for most applications. Uses STARTTLS encryption and is widely supported.</li>
+                <li><strong>Port 465:</strong> Uses SSL encryption from the start. Good for secure connections.</li>
+                <li><strong>Port 25:</strong> Traditional SMTP port, often blocked by ISPs to prevent spam.</li>
+                <li><strong>Port 2525:</strong> Alternative port when others are blocked.</li>
+            </ul>
+            <p>Port 587 with TLS encryption is generally the best choice for modern applications.</p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question">
+            Why am I getting authentication errors?
+            <i class="fas fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+            <p>Authentication errors are common and usually caused by:</p>
+            <ul>
+                <li><strong>Incorrect credentials:</strong> Double-check your username and password</li>
+                <li><strong>Two-factor authentication:</strong> Many providers require app-specific passwords when 2FA is enabled</li>
+                <li><strong>SMTP access disabled:</strong> Some email providers require enabling SMTP access in security settings</li>
+                <li><strong>Account locked:</strong> Too many failed attempts may temporarily lock your account</li>
+            </ul>
+            <p>For Gmail, you may need to enable "Less secure app access" or use an app-specific password.</p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question">
+            What does "Connection timeout" mean?
+            <i class="fas fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+            <p>Connection timeouts indicate that your application cannot reach the SMTP server. Common causes include:</p>
+            <ul>
+                <li><strong>Firewall blocking:</strong> Your firewall or ISP may block SMTP ports</li>
+                <li><strong>Incorrect hostname:</strong> Verify the SMTP server address is correct</li>
+                <li><strong>Network issues:</strong> Temporary connectivity problems</li>
+                <li><strong>Server downtime:</strong> The email provider's SMTP server may be temporarily unavailable</li>
+            </ul>
+            <p>Try using an alternative port (like 2525) or contact your ISP if the issue persists.</p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question">
+            Is it safe to test with my real email credentials?
+            <i class="fas fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+            <p>Yes, this SMTP tester is designed with security in mind:</p>
+            <ul>
+                <li><strong>Encrypted transmission:</strong> All data is sent over HTTPS</li>
+                <li><strong>No credential storage:</strong> Your passwords are never stored on our servers</li>
+                <li><strong>Temporary processing:</strong> Credentials are only used for the immediate test</li>
+                <li><strong>No logging:</strong> We don't log or track your authentication details</li>
+            </ul>
+            <p>However, if you're concerned, consider creating a dedicated email account for testing purposes.</p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question">
+            Can I test with attachments?
+            <i class="fas fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+            <p>Yes, you can test email sending with attachments:</p>
+            <ul>
+                <li><strong>File size limit:</strong> Maximum 1MB total for all attachments</li>
+                <li><strong>Supported formats:</strong> PDF, DOC, DOCX, TXT, images (JPG, PNG, GIF), and other common formats</li>
+                <li><strong>Multiple files:</strong> You can attach multiple files as long as the total size doesn't exceed 1MB</li>
+                <li><strong>Temporary storage:</strong> Uploaded files are automatically deleted after testing</li>
+            </ul>
+            <p>Testing with attachments helps verify that your SMTP server can handle different message types and sizes.</p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question">
+            Why are my emails going to spam?
+            <i class="fas fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+            <p>Several factors can cause emails to be marked as spam:</p>
+            <ul>
+                <li><strong>No SPF/DKIM records:</strong> Proper authentication records help prove email legitimacy</li>
+                <li><strong>Poor sender reputation:</strong> New or low-reputation domains may be filtered</li>
+                <li><strong>Content triggers:</strong> Certain words or formatting can trigger spam filters</li>
+                <li><strong>Missing reverse DNS:</strong> Your server's IP should have proper reverse DNS configuration</li>
+            </ul>
+            <p>Consider implementing SPF, DKIM, and DMARC records for better email deliverability.</p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question">
+            How can I improve email deliverability?
+            <i class="fas fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+            <p>To improve email deliverability:</p>
+            <ul>
+                <li><strong>Set up SPF records:</strong> Authorize your servers to send emails for your domain</li>
+                <li><strong>Implement DKIM:</strong> Digitally sign your emails to prove authenticity</li>
+                <li><strong>Configure DMARC:</strong> Provide instructions for handling failed authentication</li>
+                <li><strong>Use a reputable SMTP service:</strong> Consider services like SendGrid, Mailgun, or Amazon SES</li>
+                <li><strong>Maintain list hygiene:</strong> Remove bounced and invalid email addresses</li>
+                <li><strong>Monitor reputation:</strong> Keep track of your sender reputation and deliverability metrics</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question">
+            What should I do if my test fails?
+            <i class="fas fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+            <p>If your SMTP test fails, try these troubleshooting steps:</p>
+            <ol>
+                <li><strong>Check credentials:</strong> Verify username, password, and server settings</li>
+                <li><strong>Try different ports:</strong> Test with ports 587, 465, and 2525</li>
+                <li><strong>Adjust encryption:</strong> Try different encryption methods (SSL, TLS, None)</li>
+                <li><strong>Check network:</strong> Ensure your firewall isn't blocking SMTP ports</li>
+                <li><strong>Review logs:</strong> Look at the detailed error messages in the transaction log</li>
+                <li><strong>Contact provider:</strong> Check with your email provider for specific requirements</li>
+            </ol>
+            <p>The transaction log provides detailed information about what went wrong during the test.</p>
+        </div>
+    </div>
+</div>
