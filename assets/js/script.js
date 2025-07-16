@@ -259,7 +259,7 @@ class SMTPTester {
 
         try {
             const formData = this.prepareFormData();
-            const response = await this.sendRequest('/api/smtp-test.php', formData);
+            const response = await this.sendRequest('/api/simple-smtp.php', formData);
             
             if (response.success) {
                 this.logMessage('Email sent successfully!', 'success');
@@ -269,16 +269,22 @@ class SMTPTester {
                 document.getElementById('uploaded-files').innerHTML = '';
                 
                 // Log debug information if available
-                if (response.debug) {
-                    this.logDebugInfo(response.debug);
+                if (response.debug_logs && response.debug_logs.length > 0) {
+                    response.debug_logs.forEach(log => this.logMessage(log, 'debug'));
+                }
+                if (response.debug_info) {
+                    this.logDebugInfo(response.debug_info);
                 }
             } else {
                 this.logMessage(`Error: ${response.message}`, 'error');
                 this.showError(response.message);
                 
                 // Log debug information if available
-                if (response.debug) {
-                    this.logDebugInfo(response.debug);
+                if (response.debug_logs && response.debug_logs.length > 0) {
+                    response.debug_logs.forEach(log => this.logMessage(log, 'debug'));
+                }
+                if (response.debug_info) {
+                    this.logDebugInfo(response.debug_info);
                 }
             }
         } catch (error) {
@@ -300,23 +306,29 @@ class SMTPTester {
 
         try {
             const formData = this.prepareConnectionData();
-            const response = await this.sendRequest('/api/smtp-test.php?action=test', formData);
+            const response = await this.sendRequest('/api/simple-smtp.php?action=test', formData);
             
             if (response.success) {
                 this.logMessage('Connection test successful!', 'success');
                 this.showSuccess('SMTP connection is working correctly!');
                 
                 // Log debug information if available
-                if (response.debug) {
-                    this.logDebugInfo(response.debug);
+                if (response.debug_logs && response.debug_logs.length > 0) {
+                    response.debug_logs.forEach(log => this.logMessage(log, 'debug'));
+                }
+                if (response.debug_info) {
+                    this.logDebugInfo(response.debug_info);
                 }
             } else {
                 this.logMessage(`Connection failed: ${response.message}`, 'error');
                 this.showError(response.message);
                 
                 // Log debug information if available
-                if (response.debug) {
-                    this.logDebugInfo(response.debug);
+                if (response.debug_logs && response.debug_logs.length > 0) {
+                    response.debug_logs.forEach(log => this.logMessage(log, 'debug'));
+                }
+                if (response.debug_info) {
+                    this.logDebugInfo(response.debug_info);
                 }
             }
         } catch (error) {
@@ -354,11 +366,20 @@ class SMTPTester {
 
     prepareConnectionData() {
         const formData = new FormData();
-        const requiredFields = ['smtp_host', 'smtp_port', 'smtp_username', 'smtp_password', 'smtp_auth'];
+        const requiredFields = ['smtp_host', 'smtp_port', 'smtp_username', 'smtp_password', 'smtp_auth', 'from_email'];
         
         requiredFields.forEach(field => {
             const element = document.getElementById(field.replace('_', '-'));
             if (element) {
+                formData.append(field, element.value);
+            }
+        });
+
+        // Add optional fields
+        const optionalFields = ['from_name', 'reply_to'];
+        optionalFields.forEach(field => {
+            const element = document.getElementById(field.replace('_', '-'));
+            if (element && element.value) {
                 formData.append(field, element.value);
             }
         });
